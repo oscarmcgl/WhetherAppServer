@@ -112,7 +112,7 @@ app.post("/vibe", async (req, res) => {
 });
 
 // Get a random vibe
-app.get("/vibe", async (req, res) => {
+app.get("/getvibe", async (req, res) => {
   try {
     const sheets = google.sheets({ version: "v4", auth: await auth.getClient() });
     const range = `${SHEET_NAME_VIBE}!A2:A`; // Assuming the vibes are in column A
