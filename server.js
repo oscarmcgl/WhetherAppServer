@@ -84,6 +84,26 @@ app.post("/vote", async (req, res) => {
         }
     });
 
+app.post("/getvotes", async (req, res) => {
+    try {
+        const sheets = google.sheets({ version: "v4", auth: await auth.getClient() });
+        const range = `${SHEET_NAME_VOTE}!A2:H2`; // Assuming the weather types are in columns A to H
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: SPREADSHEET_ID,
+            range,
+        });
+
+        const row = response.data.values[0] || Array(8).fill(0); // Default to 0 if no data
+        const weatherTypes = ["sun", "rain", "cloudy", "fog", "snow", "wind", "storm", "hail"];
+        const votes = Object.fromEntries(weatherTypes.map((type, index) => [type, parseInt(row[index], 10)]));
+
+        res.status(200).json(votes);
+    } catch (error) {
+        console.error("Error retrieving votes:", error);
+        res.status(500).send("Failed to retrieve votes");
+    }
+});
+
 // Add a vibe
 app.post("/vibe", async (req, res) => {
   const { vibe } = req.body;
