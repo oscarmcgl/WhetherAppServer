@@ -84,7 +84,7 @@ app.post("/vote", async (req, res) => {
         }
     });
 
-app.post("/getvotes", async (req, res) => {
+app.get("/getvotes", async (req, res) => {
     try {
         const sheets = google.sheets({ version: "v4", auth: await auth.getClient() });
         const range = `${SHEET_NAME_VOTE}!A2:H2`; // Assuming the weather types are in columns A to H
